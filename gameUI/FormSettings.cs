@@ -1,27 +1,76 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using gameUI1;
+﻿//-----------------------------------------------------------------------
+// <copyright file="FormSettings.cs" company="GameUI">
+// Yafim Vodkov 308973882 Or Brand 302521034
+// </copyright>
+//----------------------------------------------------------------------
 
-namespace gameUI
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
+namespace GameUI
 {
     public class FormSettings : Form
     {
+        /// <summary>
+        /// Form header
+        /// </summary>
         private const string k_Header = "Othello - Game Settings";
+
+        /// <summary>
+        /// Button of choose size
+        /// </summary>
         private const string k_ChooseSize = "Board Size: 6x6 (click to increase)";
+
+        /// <summary>
+        /// Button choose size name
+        /// </summary>
         private const string k_ChooseSizeName = "buttonBoardSize";
+
+        /// <summary>
+        /// Button choose one player text
+        /// </summary>
         private const string k_Choose1Player = "Play against the computer ";
+
+        /// <summary>
+        /// Button choose one player name
+        /// </summary>
         private const string k_Choose1PlayerName = "buttonOnePlayer";
+
+        /// <summary>
+        /// Button choose two players text
+        /// </summary>
         private const string k_Choose2Players = "Play against your friend";
+
+        /// <summary>
+        /// Button choose two players name
+        /// </summary>
         private const string k_Choose2PlayerName = "buttonTwoPlayers";
 
+        /// <summary>
+        /// Board size button
+        /// </summary>
+        private readonly Button m_BoardSizeButton;
+
+        /// <summary>
+        /// Player Vs Player button
+        /// </summary>
+        private readonly Button m_PlayerVsPlayerButton;
+
+        /// <summary>
+        /// Player Vs Computer button
+        /// </summary>
+        private readonly Button m_PlayerVsComputerButton;
+
+        /// <summary>
+        /// Board size
+        /// </summary>
         private int m_BoardSize;
+
+        /// <summary>
+        /// Number of players
+        /// </summary>
         private int m_NumberOfPlayers;
-        private Button m_BoardSizeButton;
-        private Button m_PlayerVsPlayerButton;
-        private Button m_PlayerVsComputerButton;
 
         public FormSettings()
         {
@@ -32,7 +81,10 @@ namespace gameUI
 
             initForm();
         }
-
+        
+        /// <summary>
+        /// Initialize the form
+        /// </summary>
         private void initForm()
         {
             // init button of BoardSize
@@ -65,6 +117,11 @@ namespace gameUI
             this.Controls.Add(this.m_PlayerVsPlayerButton);
         }
 
+        /// <summary>
+        /// Start game according to the user choise
+        /// </summary>
+        /// <param name="i_Sender"></param>
+        /// <param name="i_E"></param>
         private void gameStart_Click(object i_Sender, EventArgs i_E)
         {
             Button chosenButton = i_Sender as Button;
@@ -74,6 +131,11 @@ namespace gameUI
             Game.StartGame(m_BoardSize, m_NumberOfPlayers);
         }
 
+        /// <summary>
+        /// Increase size according to user choise
+        /// </summary>
+        /// <param name="i_Sender"></param>
+        /// <param name="i_E"></param>
         private void boardSizeButtonClick(object i_Sender, EventArgs i_E)
         {
             m_BoardSize = (m_BoardSize + 2) <= 12 ? m_BoardSize + 2 : 6;

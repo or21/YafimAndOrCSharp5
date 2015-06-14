@@ -1,12 +1,12 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Utils.cs" company="B15_Ex02">
+// <copyright file="Utils.cs" company="GameLogic">
 // Yafim Vodkov 308973882 Or Brand 302521034
 // </copyright>
 //----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
 
-namespace B15_Ex05_1
+namespace GameLogic
 {
     /// <summary>
     /// This class holds Othello game logic.
@@ -26,7 +26,7 @@ namespace B15_Ex05_1
         /// <returns>Clone of io_GameManagerToClone</returns>
         private static GameManager cloneGameManager(GameManager i_GameManagerToClone, Player i_Player)
         {
-            GameManager clonedGameManager = new GameManager(i_GameManagerToClone.Size, 1, i_Player.Name, "Comp", false);
+            GameManager clonedGameManager = new GameManager(i_GameManagerToClone.Size, 1, i_Player.Name, "Comp");
             for (int i = 0; i < i_GameManagerToClone.Size; i++)
             {
                 for (int j = 0; j < i_GameManagerToClone.Size; j++)
@@ -104,7 +104,6 @@ namespace B15_Ex05_1
             GameManager tempGameManager = cloneGameManager(i_CurrentGameState, i_Player);
 
             int maxMovesSoFar = 0;
-            int availableMovesForCurrentStep;
 
             List<Coord> bestResultsArray = new List<Coord>();
 
@@ -114,7 +113,7 @@ namespace B15_Ex05_1
                 int tempY = coordinate.m_Y;
 
                 MakeMove(ref tempGameManager, tempPlayer, tempX, tempY);
-                availableMovesForCurrentStep = tempPlayer.PossibleMovesCoordinates.Count;
+                int availableMovesForCurrentStep = tempPlayer.PossibleMovesCoordinates.Count;
 
                 if (availableMovesForCurrentStep == maxMovesSoFar)
                 {

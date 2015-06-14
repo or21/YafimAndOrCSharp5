@@ -1,13 +1,16 @@
-﻿using gameUI1;
+﻿//-----------------------------------------------------------------------
+// <copyright file="Program.cs" company="GameUI">
+// Yafim Vodkov 308973882 Or Brand 302521034
+// </copyright>
+//----------------------------------------------------------------------
 
-namespace gameUI
+namespace GameUI
 {
     public class Program
     {
         public static void Main()
         {
-            Game game = new Game();
-
+            new Game();
         }
     }
 }

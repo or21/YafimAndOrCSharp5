@@ -1,11 +1,11 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Player.cs" company="B15_Ex02">
+// <copyright file="Player.cs" company="GameLogic">
 // Yafim Vodkov 308973882 Or Brand 302521034
 // </copyright>
 //----------------------------------------------------------------------
 using System.Collections.Generic;
 
-namespace B15_Ex05_1
+namespace GameLogic
 {
     /// <summary>
     /// This class hold player's properties.
@@ -15,42 +15,47 @@ namespace B15_Ex05_1
         /// <summary>
         /// If player is computer..
         /// </summary>
-        private bool m_isComputer;
+        private readonly bool r_IsComputer;
 
         /// <summary>
         /// Shape of the player
         /// </summary>
-        private Coin m_shape;
+        private readonly Coin r_Shape;
 
         /// <summary>
         /// Possible moves
         /// </summary>
-        private bool[,] m_availableMoves;
+        private readonly bool[,] r_AvailableMoves;
 
         /// <summary>
         /// Size of the board
         /// </summary>
-        private int m_boardSize;
+        private readonly int r_BoardSize;
 
         /// <summary>
         /// The name of the player
         /// </summary>
-        private string m_name;
+        private string m_Name;
 
         /// <summary>
         /// Current points of the player
         /// </summary>
-        private int m_currentPoints;
+        private int m_CurrentPoints;
 
         /// <summary>
         /// Number of available moves left
         /// </summary>
-        private int m_numberOfAvailableMoves;
+        private int m_NumberOfAvailableMoves;
 
         /// <summary>
         /// The possible coordinates player can move
         /// </summary>
-        private List<Coord> m_possibleMovesCoordinates;
+        private List<Coord> m_PossibleMovesCoordinates;
+
+        /// <summary>
+        /// The number of points in this session of games
+        /// </summary>
+        private int m_NumberOfWinnings;
 
         /// <summary>
         /// Initializes a new instance of the Player class.
@@ -61,20 +66,21 @@ namespace B15_Ex05_1
         /// <param name="i_BoardSize">Game board size</param>
         public Player(bool i_IsComputer, Coin i_Shape, string i_PlayerName, int i_BoardSize)
         {
-            this.m_name = i_PlayerName;
-            this.m_isComputer = i_IsComputer;
-            this.m_shape = i_Shape;
-            this.m_boardSize = i_BoardSize;
-            this.m_availableMoves = new bool[m_boardSize, m_boardSize];
-            this.m_currentPoints = 0;
-            this.m_numberOfAvailableMoves = 0;
-            this.m_possibleMovesCoordinates = new List<Coord>();
+            this.m_Name = i_PlayerName;
+            this.r_IsComputer = i_IsComputer;
+            this.r_Shape = i_Shape;
+            this.r_BoardSize = i_BoardSize;
+            this.r_AvailableMoves = new bool[r_BoardSize, r_BoardSize];
+            this.m_CurrentPoints = 0;
+            this.m_NumberOfAvailableMoves = 0;
+            this.m_PossibleMovesCoordinates = new List<Coord>();
+            this.m_NumberOfWinnings = 0;
 
-            for (int i = 0; i < m_boardSize; i++)
+            for (int i = 0; i < r_BoardSize; i++)
             {
-                for (int j = 0; j < m_boardSize; j++)
+                for (int j = 0; j < r_BoardSize; j++)
                 {
-                    this.m_availableMoves[i, j] = false;
+                    this.r_AvailableMoves[i, j] = false;
                 }
             }
         }
@@ -87,8 +93,8 @@ namespace B15_Ex05_1
         /// <returns>True if possible move</returns>
         public bool this[int i_X, int i_Y]
         {
-            get { return m_availableMoves[i_X, i_Y]; }
-            set { this.m_availableMoves[i_X, i_Y] = value; }
+            get { return r_AvailableMoves[i_X, i_Y]; }
+            set { this.r_AvailableMoves[i_X, i_Y] = value; }
         }
 
         /// <summary>
@@ -96,7 +102,7 @@ namespace B15_Ex05_1
         /// </summary>
         public bool IsComp
         {
-            get { return m_isComputer; }
+            get { return r_IsComputer; }
         }
 
         /// <summary>
@@ -104,7 +110,7 @@ namespace B15_Ex05_1
         /// </summary>
         public Coin ShapeCoin
         {
-            get { return m_shape; }
+            get { return r_Shape; }
         }
 
         /// <summary>
@@ -112,8 +118,8 @@ namespace B15_Ex05_1
         /// </summary>
         public int Points
         {
-            get { return m_currentPoints; }
-            set { this.m_currentPoints = value; }
+            get { return m_CurrentPoints; }
+            set { this.m_CurrentPoints = value; }
         }
 
         /// <summary>
@@ -121,8 +127,8 @@ namespace B15_Ex05_1
         /// </summary>
         public int AvailableMoves
         {
-            get { return m_numberOfAvailableMoves; }
-            set { this.m_numberOfAvailableMoves = value; }
+            get { return m_NumberOfAvailableMoves; }
+            set { this.m_NumberOfAvailableMoves = value; }
         }
 
         /// <summary>
@@ -130,8 +136,8 @@ namespace B15_Ex05_1
         /// </summary>
         public string Name
         {
-            get { return m_name; }
-            set { this.m_name = value; }
+            get { return m_Name; }
+            set { this.m_Name = value; }
         }
 
         /// <summary>
@@ -139,7 +145,7 @@ namespace B15_Ex05_1
         /// </summary>
         public int BoardSize
         {
-            get { return m_boardSize; }
+            get { return r_BoardSize; }
         }
 
         /// <summary>
@@ -147,8 +153,17 @@ namespace B15_Ex05_1
         /// </summary>
         public List<Coord> PossibleMovesCoordinates
         {
-            get { return m_possibleMovesCoordinates; }
-            set { this.m_possibleMovesCoordinates = value; }
+            get { return m_PossibleMovesCoordinates; }
+            set { this.m_PossibleMovesCoordinates = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets player's session points.
+        /// </summary>
+        public int NumberOfWinnings
+        {
+            get { return m_NumberOfWinnings; }
+            set { this.m_NumberOfWinnings = value; }
         }
     }
 
