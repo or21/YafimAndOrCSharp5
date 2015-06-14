@@ -11,7 +11,7 @@ namespace B15_Ex05_1
     /// <summary>
     /// This class holds Othello game logic.
     /// </summary>
-    internal class Utils
+    public class Utils
     {
         /// <summary>
         ///  8 directions for possible player movements
@@ -72,7 +72,7 @@ namespace B15_Ex05_1
         /// <param name="i_Player">Current player</param>
         /// <param name="i_NewX">X coordinate</param>
         /// <param name="i_NewY">Y coordinate</param>
-        public static void MakeMove(ref GameManager io_GameManager, Player i_Player, int i_NewX, int i_NewY)
+        public static void MakeMove(ref GameManager io_GameManager, ref Player i_Player, int i_NewX, int i_NewY)
         {
             io_GameManager[i_NewX, i_NewY] = i_Player.ShapeCoin;
             i_Player[i_NewX, i_NewY] = false;
@@ -113,7 +113,7 @@ namespace B15_Ex05_1
                 int tempX = coordinate.m_X;
                 int tempY = coordinate.m_Y;
 
-                MakeMove(ref tempGameManager, tempPlayer, tempX, tempY);
+                MakeMove(ref tempGameManager, ref tempPlayer, tempX, tempY);
                 availableMovesForCurrentStep = tempPlayer.PossibleMovesCoordinates.Count;
 
                 if (availableMovesForCurrentStep == maxMovesSoFar)

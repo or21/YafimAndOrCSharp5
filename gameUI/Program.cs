@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Windows.Forms;
-using gameUI1;
+﻿using gameUI1;
 
 namespace gameUI
 {

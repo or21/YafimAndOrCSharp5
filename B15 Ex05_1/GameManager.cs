@@ -15,7 +15,7 @@ namespace B15_Ex05_1
         /// <summary>
         /// Set the players
         /// </summary>
-        private Player m_playerOne, m_playerTwo;
+        private Player m_playerOne, m_playerTwo, m_CurrentPlayer;
 
         /// <summary>
         /// Coin matrix holds the current state of the game
@@ -109,68 +109,36 @@ namespace B15_Ex05_1
         }
 
         /// <summary>
-        /// Runs the game
-        /// </summary>
-        public void RunGame()
-        {
-            // Some flags
-            bool playerOneTurn = true;
-            bool isGameOver = false;
-            m_gameManager = this;
-
-            // Players to play
-            Player otherPlayer = m_playerTwo;
-
-           // Ex02.ConsoleUtils.Screen.Clear();
-            Drawer.DrawBoard(this);
-
-            while (!isGameOver)
-            {
-                // Check whose turn now
-                Player currentPlayer = playerOneTurn ? m_playerOne : m_playerTwo;
-
-                isGameOver = currentPlayerMove(currentPlayer, ref isGameOver, ref otherPlayer);
-
-                // Switch turns for next move.
-                if (!isGameOver)
-                {
-                    playerOneTurn = !playerOneTurn;
-                    otherPlayer = currentPlayer;
-                }
-            }
-        }
-
-        /// <summary>
         /// Check if players can make moves
         /// </summary>
         /// <param name="i_CurrentPlayer">Current player</param>
         /// <param name="io_IsGameOver">Update if game over</param>
         /// <param name="io_OtherPlayer">Other player</param>
         /// <returns>True if game over, Otherwise false</returns>
-        private bool currentPlayerMove(Player i_CurrentPlayer, ref bool io_IsGameOver, ref Player io_OtherPlayer)
-        {
-            // Check if current player can move
-            bool playerCanMove = i_CurrentPlayer.AvailableMoves != 0;
+        //private bool currentPlayerMove(Player i_CurrentPlayer, ref bool io_IsGameOver, ref Player io_OtherPlayer)
+        //{
+        //    // Check if current player can move
+        //    bool playerCanMove = i_CurrentPlayer.AvailableMoves != 0;
 
-            if (playerCanMove)
-            {
-                io_IsGameOver = makePlayerMove(i_CurrentPlayer, io_IsGameOver, ref io_OtherPlayer);
-            }
-            else
-            {
-                // Other player can move, Otherwise No moves left so end current game.
-                if (io_OtherPlayer.AvailableMoves != 0)
-                {
-                    Console.WriteLine("No move left for {0}!", i_CurrentPlayer.Name);
-                }
-                else
-                {
-                    io_IsGameOver = true;
-                }
-            }
+        //    if (playerCanMove)
+        //    {
+        //        io_IsGameOver = makePlayerMove(i_CurrentPlayer, io_IsGameOver, ref io_OtherPlayer);
+        //    }
+        //    else
+        //    {
+        //        // Other player can move, Otherwise No moves left so end current game.
+        //        if (io_OtherPlayer.AvailableMoves != 0)
+        //        {
+        //            Console.WriteLine("No move left for {0}!", i_CurrentPlayer.Name);
+        //        }
+        //        else
+        //        {
+        //            io_IsGameOver = true;
+        //        }
+        //    }
 
-            return io_IsGameOver;
-        }
+        //    return io_IsGameOver;
+        //}
 
         /// <summary>
         /// Make a move for current player
@@ -179,32 +147,32 @@ namespace B15_Ex05_1
         /// <param name="i_IsGameOver">Update if game over</param>
         /// <param name="i_OtherPlayer">Other player</param>
         /// <returns>True if game over, Otherwise false</returns>
-        private bool makePlayerMove(Player i_CurrentPlayer, bool i_IsGameOver, ref Player i_OtherPlayer)
-        {
-            int newX;
-            int newY;
+       // private bool makePlayerMove(Player i_CurrentPlayer, bool i_IsGameOver, ref Player i_OtherPlayer)
+       // {
+       //     int newX;
+       //     int newY;
 
-            // Computer's turn, Otherwise Human player's turn.
-            if (i_CurrentPlayer.IsComp)
-            {
-                Utils.GetAiMove(m_gameManager, i_CurrentPlayer, out newX, out newY);
-            }
-            else
-            {
-                getMove(i_CurrentPlayer, out newX, out newY, ref i_IsGameOver);
-            }
+       //     // Computer's turn, Otherwise Human player's turn.
+       //     if (i_CurrentPlayer.IsComp)
+       //     {
+       //         Utils.GetAiMove(m_gameManager, i_CurrentPlayer, out newX, out newY);
+       //     }
+       //     else
+       //     {
+       //         getMove(i_CurrentPlayer, out newX, out newY, ref i_IsGameOver);
+       //     }
 
-            if (!i_IsGameOver)
-            {
-                Utils.MakeMove(ref m_gameManager, i_CurrentPlayer, newX, newY);
-                Utils.UpadteAvailableMoves(this, ref i_OtherPlayer);
-            }
+       //     if (!i_IsGameOver)
+       //     {
+       //         Utils.MakeMove(ref m_gameManager, ref i_CurrentPlayer, newX, newY);
+       //         Utils.UpadteAvailableMoves(this, ref i_OtherPlayer);
+       //     }
 
-       //     Ex02.ConsoleUtils.Screen.Clear();
-            Drawer.DrawBoard(this);
+       ////     Ex02.ConsoleUtils.Screen.Clear();
+       //     Drawer.DrawBoard(this);
 
-            return i_IsGameOver;
-        }
+       //     return i_IsGameOver;
+       // }
 
         /// <summary>
         /// Print final results of the game.
@@ -302,6 +270,28 @@ namespace B15_Ex05_1
             }
 
             return isPossible;
+        }
+
+        /* GETTERS AND SETTERS */
+
+        public Coin[,] GameBoard
+        {
+            get { return this.m_gameBoard; }
+        }
+
+        public Player CurrenPlayer
+        {
+            get { return this.m_CurrentPlayer; }
+        }
+
+        public Player PlayerTwo
+        {
+            get { return m_playerTwo; }  
+        }
+
+        public Player PlayerOne
+        {
+            get { return m_playerOne; }
         }
     }
 

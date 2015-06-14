@@ -15,8 +15,7 @@ namespace gameUI1
     /// </summary>
     public class Game
     {
-        private const string k_Player1Name = "Black";
-        private const string k_PlayerTwoName = "White";
+
 
         /// <summary>
         /// Initializes a new instance of the Game class.
@@ -30,15 +29,14 @@ namespace gameUI1
         public static void StartGame(int i_Size, int i_NumberOfPlayers)
         {
             bool runGame = true;
-            while (runGame)
-            {
+          //  while (runGame)
+          //  {
                 // TODO: Start form of game
                 FormPlayGame formPlayGame = new FormPlayGame(i_Size, i_NumberOfPlayers);
                 formPlayGame.ShowDialog();
-                GameManager gameManager = new GameManager(i_Size, i_NumberOfPlayers, k_Player1Name, k_PlayerTwoName, runGame);
-                gameManager.RunGame();
-                runGame = playAgain(gameManager);
-            }
+
+//                runGame = playAgain(gameManager);
+        //    }
 
             MessageBox.Show("Thank You for playing...");
         }
