@@ -13,7 +13,6 @@ namespace B15_Ex05_1
     /// </summary>
     public class Drawer
     {
-        private int i;
         /// <summary>
         /// Draws current state of the board
         /// </summary>
