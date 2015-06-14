@@ -15,7 +15,7 @@ namespace B15_Ex05_1
         /// <summary>
         /// Set the players
         /// </summary>
-        private Player m_playerOne, m_playerTwo;
+        private Player m_playerOne, m_playerTwo, m_CurrentPlayer;
 
         /// <summary>
         /// Coin matrix holds the current state of the game
@@ -26,7 +26,7 @@ namespace B15_Ex05_1
         /// Size of the board
         /// </summary>
         private int m_size;
-
+        
         /// <summary>
         /// Controls and manages the running game
         /// </summary>
@@ -72,8 +72,8 @@ namespace B15_Ex05_1
             m_gameBoard[halfBoard + 1, halfBoard + 1] = Coin.O;
 
             // Update availble moves for each player
-            Utils.UpadteAvailableMoves(this, ref m_playerOne);
-            Utils.UpadteAvailableMoves(this, ref m_playerTwo);
+            Utils.UpadteAvailableMoves(this, m_playerOne);
+            Utils.UpadteAvailableMoves(this, m_playerTwo);
         }
 
         /// <summary>
@@ -112,68 +112,36 @@ namespace B15_Ex05_1
         }
 
         /// <summary>
-        /// Runs the game
-        /// </summary>
-        public void RunGame()
-        {
-            // Some flags
-            bool playerOneTurn = true;
-            bool isGameOver = false;
-            m_gameManager = this;
-
-            // Players to play
-            Player otherPlayer = m_playerTwo;
-
-            // Ex02.ConsoleUtils.Screen.Clear();
-            Drawer.DrawBoard(this);
-
-            while (!isGameOver)
-            {
-                // Check whose turn now
-                Player currentPlayer = playerOneTurn ? m_playerOne : m_playerTwo;
-
-                isGameOver = currentPlayerMove(currentPlayer, ref isGameOver, ref otherPlayer);
-
-                // Switch turns for next move.
-                if (!isGameOver)
-                {
-                    playerOneTurn = !playerOneTurn;
-                    otherPlayer = currentPlayer;
-                }
-            }
-        }
-
-        /// <summary>
         /// Check if players can make moves
         /// </summary>
         /// <param name="i_CurrentPlayer">Current player</param>
         /// <param name="io_IsGameOver">Update if game over</param>
         /// <param name="io_OtherPlayer">Other player</param>
         /// <returns>True if game over, Otherwise false</returns>
-        private bool currentPlayerMove(Player i_CurrentPlayer, ref bool io_IsGameOver, ref Player io_OtherPlayer)
-        {
-            // Check if current player can move
-            bool playerCanMove = i_CurrentPlayer.AvailableMoves != 0;
+        //private bool currentPlayerMove(Player i_CurrentPlayer, ref bool io_IsGameOver, ref Player io_OtherPlayer)
+        //{
+        //    // Check if current player can move
+        //    bool playerCanMove = i_CurrentPlayer.AvailableMoves != 0;
 
-            if (playerCanMove)
-            {
-                io_IsGameOver = makePlayerMove(i_CurrentPlayer, io_IsGameOver, ref io_OtherPlayer);
-            }
-            else
-            {
-                // Other player can move, Otherwise No moves left so end current game.
-                if (io_OtherPlayer.AvailableMoves != 0)
-                {
-                    Console.WriteLine("No move left for {0}!", i_CurrentPlayer.Name);
-                }
-                else
-                {
-                    io_IsGameOver = true;
-                }
-            }
+        //    if (playerCanMove)
+        //    {
+        //        io_IsGameOver = makePlayerMove(i_CurrentPlayer, io_IsGameOver, ref io_OtherPlayer);
+        //    }
+        //    else
+        //    {
+        //        // Other player can move, Otherwise No moves left so end current game.
+        //        if (io_OtherPlayer.AvailableMoves != 0)
+        //        {
+        //            Console.WriteLine("No move left for {0}!", i_CurrentPlayer.Name);
+        //        }
+        //        else
+        //        {
+        //            io_IsGameOver = true;
+        //        }
+        //    }
 
-            return io_IsGameOver;
-        }
+        //    return io_IsGameOver;
+        //}
 
         /// <summary>
         /// Make a move for current player
@@ -182,41 +150,41 @@ namespace B15_Ex05_1
         /// <param name="i_IsGameOver">Update if game over</param>
         /// <param name="i_OtherPlayer">Other player</param>
         /// <returns>True if game over, Otherwise false</returns>
-        private bool makePlayerMove(Player i_CurrentPlayer, bool i_IsGameOver, ref Player i_OtherPlayer)
-        {
-            int newX;
-            int newY;
+       // private bool makePlayerMove(Player i_CurrentPlayer, bool i_IsGameOver, ref Player i_OtherPlayer)
+       // {
+       //     int newX;
+       //     int newY;
 
-            // Computer's turn, Otherwise Human player's turn.
-            if (i_CurrentPlayer.IsComp)
-            {
-                Utils.GetAiMove(m_gameManager, i_CurrentPlayer, out newX, out newY);
-            }
-            else
-            {
-                getMove(i_CurrentPlayer, out newX, out newY, ref i_IsGameOver);
-            }
+       //     // Computer's turn, Otherwise Human player's turn.
+       //     if (i_CurrentPlayer.IsComp)
+       //     {
+       //         Utils.GetAiMove(m_gameManager, i_CurrentPlayer, out newX, out newY);
+       //     }
+       //     else
+       //     {
+       //         getMove(i_CurrentPlayer, out newX, out newY, ref i_IsGameOver);
+       //     }
 
-            if (!i_IsGameOver)
-            {
-                Utils.MakeMove(ref m_gameManager, i_CurrentPlayer, newX, newY);
-                Utils.UpadteAvailableMoves(this, ref i_OtherPlayer);
-            }
+       //     if (!i_IsGameOver)
+       //     {
+       //         Utils.MakeMove(ref m_gameManager, ref i_CurrentPlayer, newX, newY);
+       //         Utils.UpadteAvailableMoves(this, ref i_OtherPlayer);
+       //     }
 
-            //     Ex02.ConsoleUtils.Screen.Clear();
-            Drawer.DrawBoard(this);
+       ////     Ex02.ConsoleUtils.Screen.Clear();
+       //     Drawer.DrawBoard(this);
 
-            return i_IsGameOver;
-        }
+       //     return i_IsGameOver;
+       // }
 
         /// <summary>
         /// Print final results of the game.
         /// </summary>
-        public string PrintResult()
+        public string PrintResult(GameManager i_GameManager)
         {
             string result;
             // Count points for each player
-            Utils.CountPoints(m_gameManager, ref m_playerOne, ref m_playerTwo);
+            Utils.CountPoints(i_GameManager, ref m_playerOne, ref m_playerTwo);
 
             int currentPlayerPoints = m_playerOne.Points;
             int otherPlayerPoints = m_playerTwo.Points;
@@ -236,25 +204,79 @@ namespace B15_Ex05_1
         }
 
         /// <summary>
-        /// <summary>
-        /// Represents 3 coin states
+        /// Check if the input is a valid move, and set (x,y) as next potential move.
         /// </summary>
-        public enum Coin
+        /// <param name="o_X">x Coordinate</param>
+        /// <param name="o_Y">y Coordinate</param>
+        /// <param name="i_PlayerInput">Input to check</param>
+        /// <param name="i_Player">Current player</param>
+        /// <returns>True if a valid move</returns>
+        private bool areLettersValidMove(out int o_X, out int o_Y, string i_PlayerInput, Player i_Player)
         {
-            /// <summary>
-            /// Black coin
-            /// </summary>
-            X,
+            // Letter to Y, Number to X
+            o_Y = char.ToUpper(i_PlayerInput[0]) - 64 - 1;
+            o_X = i_PlayerInput[1] - '0' - 1;
 
-            /// <summary>
-            /// White coin
-            /// </summary>
-            O,
+            // Possible input should be within game borders.
+            bool isPossible = o_X >= 0 && o_Y >= 0 && o_X < m_size && o_Y < m_size;
 
-            /// <summary>
-            /// No coin
-            /// </summary>
-            Null
+            if (!isPossible)
+            {
+                Console.WriteLine("Invalid Input! Please Try again...");
+            }
+            else
+            {
+                isPossible = i_Player[o_X, o_Y];
+                if (!isPossible)
+                {
+                    Console.WriteLine("Can't Move here. Try again...");
+                }
+            }
+
+            return isPossible;
         }
+
+        /* GETTERS AND SETTERS */
+
+        public Coin[,] GameBoard
+        {
+            get { return this.m_gameBoard; }
+        }
+
+        public Player CurrenPlayer
+        {
+            get { return this.m_CurrentPlayer; }
+        }
+
+        public Player PlayerTwo
+        {
+            get { return m_playerTwo; }  
+        }
+
+        public Player PlayerOne
+        {
+            get { return m_playerOne; }
+        }
+    }
+
+    /// <summary>
+    /// Represents 3 coin states
+    /// </summary>
+    public enum Coin
+    {
+        /// <summary>
+        /// Black coin
+        /// </summary>
+        X,
+
+        /// <summary>
+        /// White coin
+        /// </summary>
+        O,
+
+        /// <summary>
+        /// No coin
+        /// </summary>
+        Null
     }
 }

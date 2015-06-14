@@ -11,7 +11,7 @@ namespace B15_Ex05_1
     /// <summary>
     /// This class holds Othello game logic.
     /// </summary>
-    internal class Utils
+    public class Utils
     {
         /// <summary>
         ///  8 directions for possible player movements
@@ -88,7 +88,7 @@ namespace B15_Ex05_1
             }
 
             // Update valid moves for player
-            UpadteAvailableMoves(io_GameManager, ref i_Player);
+            UpadteAvailableMoves(io_GameManager, i_Player);
         }
 
         /// <summary>
@@ -300,13 +300,13 @@ namespace B15_Ex05_1
         /// </summary>
         /// <param name="i_GameManager">Current state of the game</param>
         /// <param name="io_Player">Current player</param>
-        public static void UpadteAvailableMoves(GameManager i_GameManager, ref Player io_Player)
+        public static void UpadteAvailableMoves(GameManager i_GameManager, Player io_Player)
         {
             Coin opponentCoin = getOpponentCoin(io_Player);
             io_Player.AvailableMoves = 0;
 
             io_Player.PossibleMovesCoordinates.Clear();
-            clearPlayerAvailableMoves(i_GameManager, ref io_Player);
+            clearPlayerAvailableMoves(i_GameManager, io_Player);
 
             // for each squre - if there's opponent coin there, check for available moves around it.
             for (int i = 0; i < i_GameManager.Size; i++)
@@ -329,7 +329,7 @@ namespace B15_Ex05_1
         /// </summary>
         /// <param name="i_GameManager">Current state of the game</param>
         /// <param name="io_Player">Current player</param>
-        private static void clearPlayerAvailableMoves(GameManager i_GameManager, ref Player io_Player)
+        private static void clearPlayerAvailableMoves(GameManager i_GameManager, Player io_Player)
         {
             for (int i = 0; i < i_GameManager.Size; i++)
             {
