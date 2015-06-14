@@ -36,12 +36,12 @@ namespace gameUI
         /// <summary>
         /// Number of players.
         /// </summary>
-        private int m_NuberOfPlayers;
+        private int m_NumberOfPlayers;
 
         public FormPlayGame(int i_Size, int i_NumberOfPlayers)
         {
             m_BoardSize = i_Size;
-            m_NuberOfPlayers = i_NumberOfPlayers;
+            m_NumberOfPlayers = i_NumberOfPlayers;
 
             int sizeOfTheBoard = m_ButtonSize * m_BoardSize + (2 * m_StartPos);
             InitializeNewBoard();
@@ -72,7 +72,6 @@ namespace gameUI
                     // Possible add Buttonclick event etc..
                     Controls.Add(m_BtnToDraw);
                 }
-
             }
         }
 

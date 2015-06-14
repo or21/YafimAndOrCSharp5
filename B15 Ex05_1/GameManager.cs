@@ -26,7 +26,7 @@ namespace B15_Ex05_1
         /// Size of the board
         /// </summary>
         private int m_size;
-        
+
         /// <summary>
         /// Controls and manages the running game
         /// </summary>
@@ -40,12 +40,15 @@ namespace B15_Ex05_1
         /// <param name="i_PlayerOneName">Name of the first player</param>
         /// <param name="i_PlayerTwoName">Name of the second player ("Comp" if computer)</param>
         /// <param name="i_InitGame">Start new game</param>
-        public GameManager(int i_Size, int i_NumberOfPlayers, string i_PlayerOneName, string i_PlayerTwoName, bool i_InitGame)
+        public GameManager(int i_Size, int i_NumberOfPlayers, string i_PlayerOneName, string i_PlayerTwoName,
+            bool i_InitGame)
         {
             this.m_size = i_Size;
             this.m_gameBoard = new Coin[i_Size, i_Size];
             this.m_playerOne = new Player(false, Coin.X, i_PlayerOneName, i_Size);
-            this.m_playerTwo = (i_NumberOfPlayers == 2) ? new Player(false, Coin.O, i_PlayerTwoName, i_Size) : new Player(true, Coin.O, i_PlayerTwoName, i_Size);
+            this.m_playerTwo = (i_NumberOfPlayers == 2)
+                ? new Player(false, Coin.O, i_PlayerTwoName, i_Size)
+                : new Player(true, Coin.O, i_PlayerTwoName, i_Size);
 
             if (i_InitGame)
             {
@@ -121,7 +124,7 @@ namespace B15_Ex05_1
             // Players to play
             Player otherPlayer = m_playerTwo;
 
-           // Ex02.ConsoleUtils.Screen.Clear();
+            // Ex02.ConsoleUtils.Screen.Clear();
             Drawer.DrawBoard(this);
 
             while (!isGameOver)
@@ -200,7 +203,7 @@ namespace B15_Ex05_1
                 Utils.UpadteAvailableMoves(this, ref i_OtherPlayer);
             }
 
-       //     Ex02.ConsoleUtils.Screen.Clear();
+            //     Ex02.ConsoleUtils.Screen.Clear();
             Drawer.DrawBoard(this);
 
             return i_IsGameOver;
@@ -233,96 +236,25 @@ namespace B15_Ex05_1
         }
 
         /// <summary>
-        /// Get move from the user and check if valid move.
+        /// <summary>
+        /// Represents 3 coin states
         /// </summary>
-        /// <param name="i_Player">Current player</param>
-        /// <param name="o_X">X Coordinate</param>
-        /// <param name="o_Y">y Coordinate</param>
-        /// <param name="io_IsGameOver">true if game over, Otherwise continue</param>
-        private void getMove(Player i_Player, out int o_X, out int o_Y, ref bool io_IsGameOver)
+        public enum Coin
         {
-            // flag
-            bool isValid = false;
+            /// <summary>
+            /// Black coin
+            /// </summary>
+            X,
 
-            // Coordinates to be set
-            o_X = 0;
-            o_Y = 0;
+            /// <summary>
+            /// White coin
+            /// </summary>
+            O,
 
-            Console.WriteLine("{0}'s Turn: Please make a move ({1}): ", i_Player.Name, i_Player.ShapeCoin);
-
-            while (!isValid)
-            {
-                string playerInput = Console.ReadLine();
-                bool isValidInputSize = playerInput != null && playerInput.Length == 2;
-                bool insertedExitCode = playerInput != null && playerInput.ToUpper().Equals("Q");
-                if (isValidInputSize)
-                {
-                    isValid = areLettersValidMove(out o_X, out o_Y, playerInput, i_Player);
-                }
-                else if (insertedExitCode)
-                {
-                    isValid = true;
-                    io_IsGameOver = true;
-                }
-                else
-                {
-                    Console.WriteLine("Invalid Input! Please Try again...");
-                }
-            }
+            /// <summary>
+            /// No coin
+            /// </summary>
+            Null
         }
-
-        /// <summary>
-        /// Check if the input is a valid move, and set (x,y) as next potential move.
-        /// </summary>
-        /// <param name="o_X">x Coordinate</param>
-        /// <param name="o_Y">y Coordinate</param>
-        /// <param name="i_PlayerInput">Input to check</param>
-        /// <param name="i_Player">Current player</param>
-        /// <returns>True if a valid move</returns>
-        private bool areLettersValidMove(out int o_X, out int o_Y, string i_PlayerInput, Player i_Player)
-        {
-            // Letter to Y, Number to X
-            o_Y = char.ToUpper(i_PlayerInput[0]) - 64 - 1;
-            o_X = i_PlayerInput[1] - '0' - 1;
-
-            // Possible input should be within game borders.
-            bool isPossible = o_X >= 0 && o_Y >= 0 && o_X < m_size && o_Y < m_size;
-
-            if (!isPossible)
-            {
-                Console.WriteLine("Invalid Input! Please Try again...");
-            }
-            else
-            {
-                isPossible = i_Player[o_X, o_Y];
-                if (!isPossible)
-                {
-                    Console.WriteLine("Can't Move here. Try again...");
-                }
-            }
-
-            return isPossible;
-        }
-    }
-
-    /// <summary>
-    /// Represents 3 coin states
-    /// </summary>
-    public enum Coin
-    {
-        /// <summary>
-        /// Black coin
-        /// </summary>
-        X,
-
-        /// <summary>
-        /// White coin
-        /// </summary>
-        O,
-
-        /// <summary>
-        /// No coin
-        /// </summary>
-        Null
     }
 }
