@@ -4,15 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0718FDD2-6827-41A7-8A42-68A0DA41B271}</ProjectGuid>
-    <OutputType>Library</OutputType>
+    <ProjectGuid>{B012A824-1943-4A6C-B287-E09059B6D5C6}</ProjectGuid>
+    <OutputType>WinExe</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>B15_Ex05_1</RootNamespace>
-    <AssemblyName>B15 Ex05_1</AssemblyName>
+    <RootNamespace>gameUI</RootNamespace>
+    <AssemblyName>gameUI</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,13 +35,30 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <None Include="App.config" />
+    <Compile Include="FormSettings.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormPlayGame.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Game.cs" />
+    <Compile Include="Program.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Drawer.cs" />
-    <Compile Include="GameManager.cs" />
-    <Compile Include="Player.cs" />
-    <Compile Include="Utils.cs" />
+    <Reference Include="System" />
+    <Reference Include="System.Drawing" />
+    <Reference Include="System.Windows.Forms" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FormSettings.resx">
+      <DependentUpon>FormSettings.cs</DependentUpon>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\B15 Ex05_1\B15 Ex05_1.csproj">
+      <Project>{0718fdd2-6827-41a7-8a42-68a0da41b271}</Project>
+      <Name>B15 Ex05_1</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

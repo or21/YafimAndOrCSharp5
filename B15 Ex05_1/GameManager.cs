@@ -138,8 +138,6 @@ namespace B15_Ex05_1
                     otherPlayer = currentPlayer;
                 }
             }
-
-            printResult();
         }
 
         /// <summary>
@@ -211,30 +209,27 @@ namespace B15_Ex05_1
         /// <summary>
         /// Print final results of the game.
         /// </summary>
-        private void printResult()
+        public string PrintResult()
         {
+            string result;
             // Count points for each player
             Utils.CountPoints(m_gameManager, ref m_playerOne, ref m_playerTwo);
 
             int currentPlayerPoints = m_playerOne.Points;
             int otherPlayerPoints = m_playerTwo.Points;
-            Console.WriteLine(
-                                "{0} Score: {1}, {2} Score: {3}", 
-                                m_playerOne.Name, 
-                                m_playerOne.Points,
-                                m_playerTwo.Name, 
-                                m_playerTwo.Points);
+            string score = string.Format("({0}/{1})", m_playerOne.Points, m_playerTwo.Points);
 
             if (currentPlayerPoints == otherPlayerPoints)
             {
-                Console.WriteLine("It's a tie!");
+                result = string.Format(@"It's a tie! {0}", score);
             }
             else
             {
                 // The winner is the one with more coins
                 Player winner = (currentPlayerPoints > otherPlayerPoints) ? m_playerOne : m_playerTwo;
-                Console.WriteLine("The Winner is {0}", winner.Name);
+                result = string.Format("{0} Won!! {1}", winner.Name, score);
             }
+            return result;
         }
 
         /// <summary>
