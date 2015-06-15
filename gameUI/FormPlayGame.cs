@@ -88,7 +88,6 @@ namespace gameUI
                     m_BtnToDraw.Y = y;
 
                     // Possible add Buttonclick event etc..
-                    Controls.Add(m_BtnToDraw);
                     //m_ListOfButtons[x, y] = m_BtnToDraw;
 
                     if (m_GM.GameBoard[x, y] == Coin.X)
@@ -110,6 +109,9 @@ namespace gameUI
                     }
 
                     m_BtnToDraw.Click += button_Clicked;
+
+                    Controls.Add(m_BtnToDraw);
+
                 }
             }
         }
@@ -121,7 +123,10 @@ namespace gameUI
             m_CurrenPlayer = playerOneTurn ? m_GM.PlayerTwo : m_GM.PlayerOne;
             Utils.UpadteAvailableMoves(m_GM, ref m_CurrenPlayer);
             playerOneTurn = !playerOneTurn;
+            Controls.Clear();
             SetCurrentStateOfTheBoard();
+
+
         }
 
                 //isGameOver = currentPlayerMove(m_CurrentPlayer, ref isGameOver, ref otherPlayer);
