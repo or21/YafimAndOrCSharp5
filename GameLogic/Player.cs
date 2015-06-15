@@ -20,7 +20,7 @@ namespace GameLogic
         /// <summary>
         /// Shape of the player
         /// </summary>
-        private readonly Coin r_Shape;
+        private readonly eCoin r_Shape;
 
         /// <summary>
         /// Possible moves
@@ -61,10 +61,10 @@ namespace GameLogic
         /// Initializes a new instance of the Player class.
         /// </summary>
         /// <param name="i_IsComputer">Player is computer</param>
-        /// <param name="i_Shape">Coin shape of the player</param>
+        /// <param name="i_Shape">eCoin shape of the player</param>
         /// <param name="i_PlayerName">Name of the player</param>
         /// <param name="i_BoardSize">Game board size</param>
-        public Player(bool i_IsComputer, Coin i_Shape, string i_PlayerName, int i_BoardSize)
+        public Player(bool i_IsComputer, eCoin i_Shape, string i_PlayerName, int i_BoardSize)
         {
             this.m_Name = i_PlayerName;
             this.r_IsComputer = i_IsComputer;
@@ -108,7 +108,7 @@ namespace GameLogic
         /// <summary>
         /// Gets player's coin share
         /// </summary>
-        public Coin ShapeCoin
+        public eCoin ShapeCoin
         {
             get { return r_Shape; }
         }
@@ -175,11 +175,29 @@ namespace GameLogic
         /// <summary>
         /// X Coordinate
         /// </summary>
-        public int m_X;
+        private int m_X;
 
         /// <summary>
         /// Y Coordinate
         /// </summary>
-        public int m_Y;
+        private int m_Y;
+
+        /// <summary>
+        /// Gets or sets coordinate x.
+        /// </summary>
+        public int X
+        {
+            get { return m_X; }
+            set { m_X = value; }
+        }
+
+        /// <summary>
+        /// Gets or sets coordinate y.
+        /// </summary>
+        public int Y
+        {
+            get { return m_Y; }
+            set { m_Y = value; }
+        }
     }
 }

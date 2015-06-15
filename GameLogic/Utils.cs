@@ -23,10 +23,10 @@ namespace GameLogic
         /// </summary>
         /// <param name="i_GameManagerToClone">Instance to clone</param>
         /// <param name="i_Player">Current player</param>
-        /// <returns>Clone of io_GameManagerToClone</returns>
-        private static GameManager cloneGameManager(GameManager i_GameManagerToClone, Player i_Player)
+        /// <returns>Clone of i_GameManagerToClone</returns>
+        private static GameBoard cloneGameManager(GameBoard i_GameManagerToClone, Player i_Player)
         {
-            GameManager clonedGameManager = new GameManager(i_GameManagerToClone.Size, 1, i_Player.Name, "Comp");
+            GameBoard clonedGameManager = new GameBoard(i_GameManagerToClone.Size, 1, i_Player.Name, "Comp");
             for (int i = 0; i < i_GameManagerToClone.Size; i++)
             {
                 for (int j = 0; j < i_GameManagerToClone.Size; j++)
@@ -42,7 +42,7 @@ namespace GameLogic
         /// Clone instance of Player
         /// </summary>
         /// <param name="i_PlayerToClone">Instance to clone</param>
-        /// <returns>Clone of io_PlayerToClone</returns>
+        /// <returns>Clone of i_PlayerToClone</returns>
         private static Player clonePlayer(Player i_PlayerToClone)
         {
             int size = i_PlayerToClone.BoardSize;
@@ -68,27 +68,27 @@ namespace GameLogic
         /// <summary>
         /// Place coin in given coordinate, flip the relevant opponent coins and update the relevant valid moves for current player
         /// </summary>
-        /// <param name="io_GameManager">Current state of the game</param>
+        /// <param name="i_GameManager">Current state of the game</param>
         /// <param name="i_Player">Current player</param>
         /// <param name="i_NewX">X coordinate</param>
         /// <param name="i_NewY">Y coordinate</param>
-        public static void MakeMove(ref GameManager io_GameManager, Player i_Player, int i_NewX, int i_NewY)
+        public static void MakeMove(GameBoard i_GameManager, Player i_Player, int i_NewX, int i_NewY)
         {
-            io_GameManager[i_NewX, i_NewY] = i_Player.ShapeCoin;
+            i_GameManager[i_NewX, i_NewY] = i_Player.ShapeCoin;
             i_Player[i_NewX, i_NewY] = false;
 
-            Coin opponentCoin = getOpponentCoin(i_Player);
-            bool[] directions = createDirectionArray(io_GameManager, i_NewX, i_NewY, opponentCoin);
+            eCoin opponentCoin = getOpponentCoin(i_Player);
+            bool[] directions = createDirectionArray(i_GameManager, i_NewX, i_NewY, opponentCoin);
             for (int i = 0; i < 8; i++)
             {
                 if (directions[i])
                 {
-                    checkMove(ref io_GameManager, i_NewX, i_NewY, sr_DirectionsArrayForMakeMove[i, 0], sr_DirectionsArrayForMakeMove[i, 1], i_Player);
+                    checkMove(i_GameManager, i_NewX, i_NewY, sr_DirectionsArrayForMakeMove[i, 0], sr_DirectionsArrayForMakeMove[i, 1], i_Player);
                 }
             }
 
             // Update valid moves for player
-            UpadteAvailableMoves(io_GameManager, i_Player);
+            UpadteAvailableMoves(i_GameManager, i_Player);
         }
 
         /// <summary>
@@ -98,10 +98,10 @@ namespace GameLogic
         /// <param name="i_Player">Current player</param>
         /// <param name="o_X">x Coordinate</param>
         /// <param name="o_Y">y Coordinate</param>
-        public static void GetAiMove(GameManager i_CurrentGameState, Player i_Player, out int o_X, out int o_Y)
+        public static void GetAiMove(GameBoard i_CurrentGameState, Player i_Player, out int o_X, out int o_Y)
         {
             Player tempPlayer = clonePlayer(i_Player);
-            GameManager tempGameManager = cloneGameManager(i_CurrentGameState, i_Player);
+            GameBoard tempGameManager = cloneGameManager(i_CurrentGameState, i_Player);
 
             int maxMovesSoFar = 0;
 
@@ -109,10 +109,10 @@ namespace GameLogic
 
             foreach (Coord coordinate in i_Player.PossibleMovesCoordinates)
             {
-                int tempX = coordinate.m_X;
-                int tempY = coordinate.m_Y;
+                int tempX = coordinate.X;
+                int tempY = coordinate.Y;
 
-                MakeMove(ref tempGameManager, tempPlayer, tempX, tempY);
+                MakeMove(tempGameManager, tempPlayer, tempX, tempY);
                 int availableMovesForCurrentStep = tempPlayer.PossibleMovesCoordinates.Count;
 
                 if (availableMovesForCurrentStep == maxMovesSoFar)
@@ -143,8 +143,8 @@ namespace GameLogic
         {
             Random rnd = new Random();
             int i = rnd.Next(i_CoordinateArray.Count);
-            o_X = i_CoordinateArray[i].m_X;
-            o_Y = i_CoordinateArray[i].m_Y;
+            o_X = i_CoordinateArray[i].X;
+            o_Y = i_CoordinateArray[i].Y;
             i_CoordinateArray.Clear();
         }
 
@@ -152,13 +152,13 @@ namespace GameLogic
         /// Gets opponent coin shape
         /// </summary>
         /// <param name="i_Player">Player to check</param>
-        /// <returns>Coin shape</returns>
-        private static Coin getOpponentCoin(Player i_Player)
+        /// <returns>eCoin shape</returns>
+        private static eCoin getOpponentCoin(Player i_Player)
         {
-            Coin opponentCoin = Coin.O;
-            if (i_Player.ShapeCoin == Coin.O)
+            eCoin opponentCoin = eCoin.O;
+            if (i_Player.ShapeCoin == eCoin.O)
             {
-                opponentCoin = Coin.X;
+                opponentCoin = eCoin.X;
             }
 
             return opponentCoin;
@@ -167,31 +167,31 @@ namespace GameLogic
         /// <summary>
         /// If the player make a move that requires coin flipping - make the flipping. Check for all 8 directions.
         /// </summary>
-        /// <param name="io_GameManager">Current state of the game</param>
+        /// <param name="i_GameManager">Current state of the game</param>
         /// <param name="i_OrigX">Start point x coordinate</param>
         /// <param name="i_OrigY">Start point y coordinate</param>
         /// <param name="i_DirectionX">Direction x coordinate</param>
         /// <param name="i_DirectionY">Direction y coordinate</param>
         /// <param name="i_CurrentPlayer">Current player</param>
-        private static void checkMove(ref GameManager io_GameManager, int i_OrigX, int i_OrigY, int i_DirectionX, int i_DirectionY, Player i_CurrentPlayer)
+        private static void checkMove(GameBoard i_GameManager, int i_OrigX, int i_OrigY, int i_DirectionX, int i_DirectionY, Player i_CurrentPlayer)
         {
             // check how much squares in current direction until the end of the game board.
-            int numberOfIterations = numOfSquaresToCheckInDirection(i_OrigX, i_OrigY, i_DirectionX, i_DirectionY, io_GameManager);
-            Coin opponentCoin = getOpponentCoin(i_CurrentPlayer);
+            int numberOfIterations = numOfSquaresToCheckInDirection(i_OrigX, i_OrigY, i_DirectionX, i_DirectionY, i_GameManager);
+            eCoin opponentCoin = getOpponentCoin(i_CurrentPlayer);
             int numberOfCoinsToFlip = 0;
 
             for (int i = 1; i < numberOfIterations + 1; i++)
             {
                 // if found player coin - flip coins from new position to it. Otherwise - count the number of coins to flip.
-                bool isOpponentCoin = io_GameManager[i_OrigX + (i_DirectionX * i), i_OrigY + (i_DirectionY * i)] == opponentCoin;
+                bool isOpponentCoin = i_GameManager[i_OrigX + (i_DirectionX * i), i_OrigY + (i_DirectionY * i)] == opponentCoin;
                 if (!isOpponentCoin)
                 {
                     // checks that the coin is not Null. If not - make the flipping.
-                    bool isCurrentPlayerCoin = io_GameManager[i_OrigX + (i_DirectionX * i), i_OrigY + (i_DirectionY * i)] == i_CurrentPlayer.ShapeCoin;
+                    bool isCurrentPlayerCoin = i_GameManager[i_OrigX + (i_DirectionX * i), i_OrigY + (i_DirectionY * i)] == i_CurrentPlayer.ShapeCoin;
                     if (isCurrentPlayerCoin)
                     {
                         numberOfCoinsToFlip++;
-                        flipCoinsInRange(i_OrigX, i_OrigY, i_DirectionX, i_DirectionY, ref io_GameManager, i_CurrentPlayer, numberOfCoinsToFlip);
+                        flipCoinsInRange(i_OrigX, i_OrigY, i_DirectionX, i_DirectionY, i_GameManager, i_CurrentPlayer, numberOfCoinsToFlip);
                         break;
                     }
                 }
@@ -207,14 +207,14 @@ namespace GameLogic
         /// <param name="i_OrigY">Start point y coordinate</param>
         /// <param name="i_DirectionX">Direction x coordinate</param>
         /// <param name="i_DirectionY">Direction y coordinate</param>
-        /// <param name="io_GameManager">Current game state</param>
+        /// <param name="i_GameManager">Current game state</param>
         /// <param name="i_CurrentPlayer">Current player</param>
         /// <param name="i_NumberOfCoinsToFlip">Number of coins to flip</param>
-        private static void flipCoinsInRange(int i_OrigX, int i_OrigY, int i_DirectionX, int i_DirectionY, ref GameManager io_GameManager, Player i_CurrentPlayer, int i_NumberOfCoinsToFlip)
+        private static void flipCoinsInRange(int i_OrigX, int i_OrigY, int i_DirectionX, int i_DirectionY, GameBoard i_GameManager, Player i_CurrentPlayer, int i_NumberOfCoinsToFlip)
         {
             for (int i = 1; i < i_NumberOfCoinsToFlip + 1; i++)
             {
-                io_GameManager[i_OrigX + (i_DirectionX * i), i_OrigY + (i_DirectionY * i)] = i_CurrentPlayer.ShapeCoin;
+                i_GameManager[i_OrigX + (i_DirectionX * i), i_OrigY + (i_DirectionY * i)] = i_CurrentPlayer.ShapeCoin;
             }
         }
 
@@ -227,7 +227,7 @@ namespace GameLogic
         /// <param name="i_OffsetY">Offset y coordinate</param>
         /// <param name="i_GameManager">Current game state</param>
         /// <returns>Number of squares until the end of the game board in a given direction</returns>
-        private static int numOfSquaresToCheckInDirection(int i_OrigX, int i_OrigY, int i_OffsetX, int i_OffsetY, GameManager i_GameManager)
+        private static int numOfSquaresToCheckInDirection(int i_OrigX, int i_OrigY, int i_OffsetX, int i_OffsetY, GameBoard i_GameManager)
         {
             int numberOfIterations = 0;
             eDirection direction = calcDirection(i_OffsetX, i_OffsetY);
@@ -298,14 +298,14 @@ namespace GameLogic
         /// Updates available moves for a given player according to current state of game manager.
         /// </summary>
         /// <param name="i_GameManager">Current state of the game</param>
-        /// <param name="io_Player">Current player</param>
-        public static void UpadteAvailableMoves(GameManager i_GameManager, Player io_Player)
+        /// <param name="i_Player">Current player</param>
+        public static void UpadteAvailableMoves(GameBoard i_GameManager, Player i_Player)
         {
-            Coin opponentCoin = getOpponentCoin(io_Player);
-            io_Player.AvailableMoves = 0;
+            eCoin opponentCoin = getOpponentCoin(i_Player);
+            i_Player.AvailableMoves = 0;
 
-            io_Player.PossibleMovesCoordinates.Clear();
-            clearPlayerAvailableMoves(i_GameManager, io_Player);
+            i_Player.PossibleMovesCoordinates.Clear();
+            clearPlayerAvailableMoves(i_GameManager, i_Player);
 
             // for each squre - if there's opponent coin there, check for available moves around it.
             for (int i = 0; i < i_GameManager.Size; i++)
@@ -316,8 +316,8 @@ namespace GameLogic
                     if (sqareWithOpponentCoin)
                     {
                         // For each direction where there is Null coin check the opposit direction for a possible move.
-                        bool[] directions = createDirectionArray(i_GameManager, i, j, Coin.Null);
-                        checkAllDirections(i, j, directions, i_GameManager, ref io_Player);
+                        bool[] directions = createDirectionArray(i_GameManager, i, j, eCoin.Null);
+                        checkAllDirections(i, j, directions, i_GameManager, i_Player);
                     }
                 }
             }
@@ -327,14 +327,14 @@ namespace GameLogic
         /// Clear the player available moves matrix.
         /// </summary>
         /// <param name="i_GameManager">Current state of the game</param>
-        /// <param name="io_Player">Current player</param>
-        private static void clearPlayerAvailableMoves(GameManager i_GameManager, Player io_Player)
+        /// <param name="i_Player">Current player</param>
+        private static void clearPlayerAvailableMoves(GameBoard i_GameManager, Player i_Player)
         {
             for (int i = 0; i < i_GameManager.Size; i++)
             {
                 for (int j = 0; j < i_GameManager.Size; j++)
                 {
-                    io_Player[i, j] = false;
+                    i_Player[i, j] = false;
                 }
             }
         }
@@ -345,9 +345,9 @@ namespace GameLogic
         /// <param name="i_GameManager">Current state of the game</param>
         /// <param name="i_StartX">x coordinate</param>
         /// <param name="i_StartY">y coordinate</param>
-        /// <param name="i_Coin">Coin shape</param>
+        /// <param name="i_Coin">eCoin shape</param>
         /// <returns>True if possible direction</returns>
-        private static bool[] createDirectionArray(GameManager i_GameManager, int i_StartX, int i_StartY, Coin i_Coin)
+        private static bool[] createDirectionArray(GameBoard i_GameManager, int i_StartX, int i_StartY, eCoin i_Coin)
         {
             bool[] directions = new bool[8];
             bool leftEdge = i_StartY == 0;
@@ -399,8 +399,8 @@ namespace GameLogic
         /// <param name="i_StartY">Start y coordinate</param>
         /// <param name="i_Directions">Direction to move</param>
         /// <param name="i_GameManager">Current state of the game</param>
-        /// <param name="io_Player">Current player</param>
-        private static void checkAllDirections(int i_StartX, int i_StartY, bool[] i_Directions, GameManager i_GameManager, ref Player io_Player)
+        /// <param name="i_Player">Current player</param>
+        private static void checkAllDirections(int i_StartX, int i_StartY, bool[] i_Directions, GameBoard i_GameManager, Player i_Player)
         {
             for (int i = 0; i < 8; i++)
             {
@@ -408,16 +408,16 @@ namespace GameLogic
                 if (i_Directions[i])
                 {
                     // check if this can be a move for the player.
-                    bool canBeMove = checkIfMyCoinInEnd(i_StartX, i_StartY, -1 * sr_DirectionsArrayForMakeMove[i, 0], -1 * sr_DirectionsArrayForMakeMove[i, 1], i_GameManager, io_Player);
+                    bool canBeMove = checkIfMyCoinInEnd(i_StartX, i_StartY, -1 * sr_DirectionsArrayForMakeMove[i, 0], -1 * sr_DirectionsArrayForMakeMove[i, 1], i_GameManager, i_Player);
                     if (canBeMove)
                     {
-                        io_Player[i_StartX + sr_DirectionsArrayForMakeMove[i, 0], i_StartY + sr_DirectionsArrayForMakeMove[i, 1]] = true;
-                        io_Player.AvailableMoves++;
+                        i_Player[i_StartX + sr_DirectionsArrayForMakeMove[i, 0], i_StartY + sr_DirectionsArrayForMakeMove[i, 1]] = true;
+                        i_Player.AvailableMoves++;
 
                         Coord coord = new Coord();
-                        coord.m_X = i_StartX + sr_DirectionsArrayForMakeMove[i, 0];
-                        coord.m_Y = i_StartY + sr_DirectionsArrayForMakeMove[i, 1];
-                        io_Player.PossibleMovesCoordinates.Add(coord);
+                        coord.X = i_StartX + sr_DirectionsArrayForMakeMove[i, 0];
+                        coord.Y = i_StartY + sr_DirectionsArrayForMakeMove[i, 1];
+                        i_Player.PossibleMovesCoordinates.Add(coord);
                     }
                 }
             }
@@ -435,16 +435,16 @@ namespace GameLogic
         /// <param name="i_GameManager">Current state of the game</param>
         /// <param name="i_CurrentPlayer">Current player</param>
         /// <returns>If valid direction that can be a move</returns>
-        private static bool checkIfMyCoinInEnd(int i_StartX, int i_StartY, int i_DirectionX, int i_DirectionY, GameManager i_GameManager, Player i_CurrentPlayer)
+        private static bool checkIfMyCoinInEnd(int i_StartX, int i_StartY, int i_DirectionX, int i_DirectionY, GameBoard i_GameManager, Player i_CurrentPlayer)
         {
-            Coin opponentCoin = getOpponentCoin(i_CurrentPlayer);
+            eCoin opponentCoin = getOpponentCoin(i_CurrentPlayer);
             int numberOfIterations = numOfSquaresToCheckInDirection(i_StartX, i_StartY, i_DirectionX, i_DirectionY, i_GameManager);
             bool isMyCoinInEnd = false;
 
             // numberOfIterations - number of squares in this direction until the edge of the game board.
             for (int i = 0; i < numberOfIterations + 1; i++)
             {
-                Coin squareCoin = i_GameManager[i_StartX + (i_DirectionX * i), i_StartY + (i_DirectionY * i)];
+                eCoin squareCoin = i_GameManager[i_StartX + (i_DirectionX * i), i_StartY + (i_DirectionY * i)];
                 bool isMyCoin = squareCoin == i_CurrentPlayer.ShapeCoin;
                 bool isOppCoin = squareCoin == opponentCoin;
 
@@ -469,27 +469,27 @@ namespace GameLogic
         /// Counts the points in the game for the given players.
         /// </summary>
         /// <param name="i_GameManager">Current state of the game</param>
-        /// <param name="io_PlayerA">Player One</param>
-        /// <param name="io_PlayerB">Player Two</param>
-        public static void CountPoints(GameManager i_GameManager, ref Player io_PlayerA, ref Player io_PlayerB)
+        /// <param name="i_PlayerA">Player One</param>
+        /// <param name="i_PlayerB">Player Two</param>
+        public static void CountPoints(GameBoard i_GameManager, Player i_PlayerA, Player i_PlayerB)
         {
-            io_PlayerA.Points = 0;
-            io_PlayerB.Points = 0;
+            i_PlayerA.Points = 0;
+            i_PlayerB.Points = 0;
             for (int i = 0; i < i_GameManager.Size; i++)
             {
                 for (int j = 0; j < i_GameManager.Size; j++)
                 {
-                    Coin squareCoin = i_GameManager[i, j];
-                    bool squareIsO = Coin.O == squareCoin;
-                    bool squareIsX = Coin.X == squareCoin;
+                    eCoin squareCoin = i_GameManager[i, j];
+                    bool squareIsO = eCoin.O == squareCoin;
+                    bool squareIsX = eCoin.X == squareCoin;
                     if (squareIsX)
                     {
-                        io_PlayerA.Points++;
+                        i_PlayerA.Points++;
                     }
 
                     if (squareIsO)
                     {
-                        io_PlayerB.Points++;
+                        i_PlayerB.Points++;
                     }
                 }
             }

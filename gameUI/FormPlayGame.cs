@@ -36,7 +36,7 @@ namespace GameUI
         /// <summary>
         /// Form Name
         /// </summary>
-        private const string k_FormName = "GameBoard";
+        private const string k_FormName = "Board";
 
         /* Board dimentions */
 
@@ -61,6 +61,11 @@ namespace GameUI
         private readonly int m_BoardSize;
 
         /// <summary>
+        /// Game board
+        /// </summary>
+        private readonly GameBoard r_GameBoard;
+
+        /// <summary>
         /// Current player
         /// </summary>
         private Player m_CurrenPlayer;
@@ -69,11 +74,6 @@ namespace GameUI
         /// Game manager instance
         /// </summary>
         private bool m_PlayerOneTurn;
-
-        /// <summary>
-        /// Current turn
-        /// </summary>
-        private GameManager m_GameManager;
 
         /// <summary>
         /// Number of players.
@@ -89,7 +89,7 @@ namespace GameUI
         {
             m_BoardSize = i_Size;
             m_NumberOfPlayers = i_NumberOfPlayers;
-            m_GameManager = new GameManager(m_BoardSize, m_NumberOfPlayers, k_Player1Name, k_PlayerTwoName);
+            r_GameBoard = new GameBoard(m_BoardSize, m_NumberOfPlayers, k_Player1Name, k_PlayerTwoName);
 
             FormBorderStyle = FormBorderStyle.FixedSingle;
 
@@ -101,9 +101,9 @@ namespace GameUI
         /// </summary>
         private void initNewGame()
         {
-            m_GameManager.SetNewGame();
+            r_GameBoard.SetNewGame();
             m_PlayerOneTurn = true;
-            m_CurrenPlayer = m_GameManager.PlayerOne;
+            m_CurrenPlayer = r_GameBoard.PlayerOne;
             int sizeOfTheBoard = (k_ButtonSize * m_BoardSize) + (2 * k_StartPos);
             this.Text = k_FormHeader;
             this.Name = k_FormName;
@@ -150,14 +150,14 @@ namespace GameUI
         /// <param name="i_BtnToDraw">Button to draw</param>
         private void paintButton(int i_X, int i_Y, MyButton i_BtnToDraw)
         {
-            switch (m_GameManager.GameBoard[i_X, i_Y])
+            switch (r_GameBoard.Board[i_X, i_Y])
             {
-                case Coin.X:
+                case eCoin.X:
                     i_BtnToDraw.BackColor = Color.Black;
                     i_BtnToDraw.Text = "O";
                     i_BtnToDraw.ForeColor = Color.White;
                     break;
-                case Coin.O:
+                case eCoin.O:
                     i_BtnToDraw.BackColor = Color.White;
                     i_BtnToDraw.Text = "O";
                     i_BtnToDraw.ForeColor = Color.Black;
@@ -179,7 +179,7 @@ namespace GameUI
         {
             if (m_CurrenPlayer.AvailableMoves == 0)
             {
-                m_CurrenPlayer = m_PlayerOneTurn ? m_GameManager.PlayerTwo : m_GameManager.PlayerOne;
+                m_CurrenPlayer = m_PlayerOneTurn ? r_GameBoard.PlayerTwo : r_GameBoard.PlayerOne;
                 m_PlayerOneTurn = !m_PlayerOneTurn;
                 if (m_CurrenPlayer.AvailableMoves == 0)
                 {
@@ -215,11 +215,11 @@ namespace GameUI
             MyButton currentButton = i_Sender as MyButton;
             if (currentButton != null)
             {
-                Utils.MakeMove(ref m_GameManager, m_CurrenPlayer, currentButton.X, currentButton.Y);
+                Utils.MakeMove(r_GameBoard, m_CurrenPlayer, currentButton.X, currentButton.Y);
             }
 
-            m_CurrenPlayer = m_PlayerOneTurn ? m_GameManager.PlayerTwo : m_GameManager.PlayerOne;
-            Utils.UpadteAvailableMoves(m_GameManager, m_CurrenPlayer);
+            m_CurrenPlayer = m_PlayerOneTurn ? r_GameBoard.PlayerTwo : r_GameBoard.PlayerOne;
+            Utils.UpadteAvailableMoves(r_GameBoard, m_CurrenPlayer);
             m_PlayerOneTurn = !m_PlayerOneTurn;
             System.Threading.Thread.Sleep(250);
 
@@ -240,12 +240,12 @@ namespace GameUI
             {
                 int x;
                 int y;
-                Utils.GetAiMove(m_GameManager, m_CurrenPlayer, out x, out y);
-                Utils.MakeMove(ref m_GameManager, m_CurrenPlayer, x, y);
+                Utils.GetAiMove(r_GameBoard, m_CurrenPlayer, out x, out y);
+                Utils.MakeMove(r_GameBoard, m_CurrenPlayer, x, y);
             }
 
-            m_CurrenPlayer = m_PlayerOneTurn ? m_GameManager.PlayerTwo : m_GameManager.PlayerOne;
-            Utils.UpadteAvailableMoves(m_GameManager, m_CurrenPlayer);
+            m_CurrenPlayer = m_PlayerOneTurn ? r_GameBoard.PlayerTwo : r_GameBoard.PlayerOne;
+            Utils.UpadteAvailableMoves(r_GameBoard, m_CurrenPlayer);
             m_PlayerOneTurn = !m_PlayerOneTurn;
         }
 
@@ -259,7 +259,7 @@ namespace GameUI
             string message = string.Format(
 @"{0}
 Would you like to another round?", 
-                                 m_GameManager.PrintResult(m_GameManager));
+                                 r_GameBoard.GetFinalResult(r_GameBoard));
 
             DialogResult dialogResult = MessageBox.Show(message, header, MessageBoxButtons.YesNo);
             return dialogResult == DialogResult.Yes;
