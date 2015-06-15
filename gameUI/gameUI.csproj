@@ -53,11 +53,6 @@
     <Reference Include="System.Windows.Forms" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FormSettings.resx">
-      <DependentUpon>FormSettings.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\GameLogic\GameLogic.csproj">
       <Project>{71e06039-bf0c-49ab-95ff-938fe3d52af3}</Project>
       <Name>GameLogic</Name>

@@ -7,9 +7,9 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameUI", "gameUI\GameUI.csp
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GameLogic", "GameLogic\GameLogic.csproj", "{71E06039-BF0C-49AB-95FF-938FE3D52AF3}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{8C0D9B9D-7BF9-4BB0-9910-7FB33EF9D9F7}"
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{AB03FBD9-B866-4A58-9F1E-CA32F08F9171}"
 	ProjectSection(SolutionItems) = preProject
-		..\..\..\..\Downloads\Exercise-Checking-Report.txt = ..\..\..\..\Downloads\Exercise-Checking-Report.txt
+		Exercise-Checking-Report.txt = Exercise-Checking-Report.txt
 	EndProjectSection
 EndProject
 Global
