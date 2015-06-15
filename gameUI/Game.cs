@@ -18,19 +18,19 @@ namespace GameUI
         public Game()
         {
             FormSettings formSettings = new FormSettings();
+            Application.EnableVisualStyles();
             formSettings.ShowDialog();
         }
 
         /// <summary>
         /// Start the form of play the game.
         /// </summary>
-        /// <param name="i_Size"></param>
-        /// <param name="i_NumberOfPlayers"></param>
+        /// <param name="i_Size">Board Size</param>
+        /// <param name="i_NumberOfPlayers">Number of players</param>
         public static void StartGame(int i_Size, int i_NumberOfPlayers)
         {
             FormPlayGame formPlayGame = new FormPlayGame(i_Size, i_NumberOfPlayers);
             formPlayGame.ShowDialog();
-            MessageBox.Show("Thank You for playing...");
         }
     }
 }

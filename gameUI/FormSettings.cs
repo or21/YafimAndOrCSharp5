@@ -10,6 +10,9 @@ using System.Windows.Forms;
 
 namespace GameUI
 {
+    /// <summary>
+    /// FormSettings extends Form
+    /// </summary>
     public class FormSettings : Form
     {
         /// <summary>
@@ -53,12 +56,12 @@ namespace GameUI
         private readonly Button m_BoardSizeButton;
 
         /// <summary>
-        /// Player Vs Player button
+        /// Player against Player button
         /// </summary>
         private readonly Button m_PlayerVsPlayerButton;
 
         /// <summary>
-        /// Player Vs Computer button
+        /// Player against Computer button
         /// </summary>
         private readonly Button m_PlayerVsComputerButton;
 
@@ -72,6 +75,9 @@ namespace GameUI
         /// </summary>
         private int m_NumberOfPlayers;
 
+        /// <summary>
+        /// Initializes a new instance of the FormSettings class.
+        /// </summary>
         public FormSettings()
         {
             this.m_BoardSize = 6;
@@ -109,19 +115,22 @@ namespace GameUI
             this.m_PlayerVsPlayerButton.Click += this.gameStart_Click;
 
             // init the form
+            this.FormBorderStyle = FormBorderStyle.FixedSingle;
             this.Text = k_Header;
             this.Name = "Settings";
             this.ClientSize = new Size(284, 153);
             this.Controls.Add(this.m_BoardSizeButton);
             this.Controls.Add(this.m_PlayerVsComputerButton);
             this.Controls.Add(this.m_PlayerVsPlayerButton);
+            this.MaximizeBox = false;
+            this.MinimizeBox = false;
         }
 
         /// <summary>
-        /// Start game according to the user choise
+        /// Start game according to the user choice
         /// </summary>
-        /// <param name="i_Sender"></param>
-        /// <param name="i_E"></param>
+        /// <param name="i_Sender">The sender</param>
+        /// <param name="i_E">Event arguments</param>
         private void gameStart_Click(object i_Sender, EventArgs i_E)
         {
             Button chosenButton = i_Sender as Button;
@@ -132,10 +141,10 @@ namespace GameUI
         }
 
         /// <summary>
-        /// Increase size according to user choise
+        /// Increase size according to user choice
         /// </summary>
-        /// <param name="i_Sender"></param>
-        /// <param name="i_E"></param>
+        /// <param name="i_Sender">The sender</param>
+        /// <param name="i_E">Event arguments</param>
         private void boardSizeButtonClick(object i_Sender, EventArgs i_E)
         {
             m_BoardSize = (m_BoardSize + 2) <= 12 ? m_BoardSize + 2 : 6;

@@ -11,6 +11,9 @@ using GameLogic;
 
 namespace GameUI
 {
+    /// <summary>
+    /// FormPlayGame class extends Form
+    /// </summary>
     public class FormPlayGame : Form
     {
         /* GAME */
@@ -77,11 +80,18 @@ namespace GameUI
         /// </summary>
         private int m_NumberOfPlayers;
 
+        /// <summary>
+        /// Initializes a new instance of the FormPlayGame class.
+        /// </summary>
+        /// <param name="i_Size">Size of the board</param>
+        /// <param name="i_NumberOfPlayers">Number of players</param>
         public FormPlayGame(int i_Size, int i_NumberOfPlayers)
         {
             m_BoardSize = i_Size;
             m_NumberOfPlayers = i_NumberOfPlayers;
             m_GameManager = new GameManager(m_BoardSize, m_NumberOfPlayers, k_Player1Name, k_PlayerTwoName);
+
+            FormBorderStyle = FormBorderStyle.FixedSingle;
 
             initNewGame();
         }
@@ -135,9 +145,9 @@ namespace GameUI
         /// <summary>
         /// Paint the button according to logic
         /// </summary>
-        /// <param name="i_X"></param>
-        /// <param name="i_Y"></param>
-        /// <param name="i_BtnToDraw"></param>
+        /// <param name="i_X">X Coordinate</param>
+        /// <param name="i_Y">Y Coordinate</param>
+        /// <param name="i_BtnToDraw">Button to draw</param>
         private void paintButton(int i_X, int i_Y, MyButton i_BtnToDraw)
         {
             switch (m_GameManager.GameBoard[i_X, i_Y])
@@ -163,7 +173,7 @@ namespace GameUI
         }
 
         /// <summary>
-        /// Check if there availables moves
+        /// Check if there available moves
         /// </summary>
         private void checkIfGameContinues()
         {
@@ -198,8 +208,8 @@ namespace GameUI
         /// <summary>
         /// Make a move according to the clicked button
         /// </summary>
-        /// <param name="i_Sender"></param>
-        /// <param name="i_E"></param>
+        /// <param name="i_Sender">The sender</param>
+        /// <param name="i_E">Event arguments</param>
         private void button_Clicked(object i_Sender, EventArgs i_E)
         {
             MyButton currentButton = i_Sender as MyButton;
@@ -256,7 +266,7 @@ Would you like to another round?",
         }
 
         /// <summary>
-        /// Gets or sets start position
+        /// Gets start position
         /// </summary>
         public int StartPos
         {
@@ -264,7 +274,7 @@ Would you like to another round?",
         }
 
         /// <summary>
-        /// Gets or sets board size
+        /// Gets board size
         /// </summary>
         public int BoardSize
         {
@@ -272,7 +282,7 @@ Would you like to another round?",
         }
 
         /// <summary>
-        /// Gets or sets buttons size
+        /// Gets buttons size
         /// </summary>
         public int ButtonSize
         {

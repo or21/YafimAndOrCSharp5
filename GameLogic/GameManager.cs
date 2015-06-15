@@ -101,6 +101,8 @@ namespace GameLogic
         /// <summary>
         /// Print final results of the game.
         /// </summary>
+        /// <param name="i_GameManager">Instance of Game Manger</param>
+        /// <returns>The result</returns>
         public string PrintResult(GameManager i_GameManager)
         {
             string result;
@@ -130,7 +132,7 @@ namespace GameLogic
         /* GETTERS AND SETTERS */
 
         /// <summary>
-        /// Gets or sets game board
+        /// Gets game board
         /// </summary>
         public Coin[,] GameBoard
         {
@@ -138,7 +140,7 @@ namespace GameLogic
         }
 
         /// <summary>
-        /// Gets or sets player two
+        /// Gets player two
         /// </summary>
         public Player PlayerTwo
         {
@@ -146,7 +148,7 @@ namespace GameLogic
         }
 
         /// <summary>
-        /// Gets or sets player one
+        /// Gets player one
         /// </summary>
         public Player PlayerOne
         {
