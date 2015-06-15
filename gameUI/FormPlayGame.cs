@@ -1,182 +1,292 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Text;
-using System.Windows.Forms;
-using B15_Ex05_1;
+﻿//-----------------------------------------------------------------------
+// <copyright file="FormPlayGame.cs" company="GameUI">
+// Yafim Vodkov 308973882 Or Brand 302521034
+// </copyright>
+//----------------------------------------------------------------------
 
-namespace gameUI
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+using GameLogic;
+
+namespace GameUI
 {
+    /// <summary>
+    /// FormPlayGame class extends Form
+    /// </summary>
     public class FormPlayGame : Form
     {
         /* GAME */
-        private Player m_CurrenPlayer;
-        private bool playerOneTurn;
-        private GameManager m_GM;
+
+        /// <summary>
+        /// Player 1 name
+        /// </summary>
         private const string k_Player1Name = "Black";
+
+        /// <summary>
+        /// Player 2 name
+        /// </summary>
         private const string k_PlayerTwoName = "White";
 
-        private const string k_FormHeader = "Othello - Black turn";
+        /// <summary>
+        /// Form header
+        /// </summary>
+        private const string k_FormHeader = "Othello - ";
+
+        /// <summary>
+        /// Form Name
+        /// </summary>
         private const string k_FormName = "GameBoard";
 
-        private MyButton[,] m_ListOfButtons;
-
         /* Board dimentions */
+
         /// <summary>
         /// Button size
         /// </summary>
-        private int m_ButtonSize = 50;
+        private const int k_ButtonSize = 50;
+
         /// <summary>
         /// Gap between buttons
         /// </summary>
-        private int Distance = 2;
+        private const int k_Distance = 2;
+
         /// <summary>
         /// X and Y Start position.
         /// </summary>
-        private int m_StartPos = 10;
-        /// <summary>
-        /// Button to draw.
-        /// </summary>
-        private MyButton m_BtnToDraw;
+        private const int k_StartPos = 10;
 
         /// <summary>
         /// Board size
         /// </summary>
-        private int m_BoardSize;
+        private readonly int m_BoardSize;
+
+        /// <summary>
+        /// Current player
+        /// </summary>
+        private Player m_CurrenPlayer;
+
+        /// <summary>
+        /// Game manager instance
+        /// </summary>
+        private bool m_PlayerOneTurn;
+
+        /// <summary>
+        /// Current turn
+        /// </summary>
+        private GameManager m_GameManager;
+
         /// <summary>
         /// Number of players.
         /// </summary>
-        private int m_NuberOfPlayers;
+        private int m_NumberOfPlayers;
 
+        /// <summary>
+        /// Initializes a new instance of the FormPlayGame class.
+        /// </summary>
+        /// <param name="i_Size">Size of the board</param>
+        /// <param name="i_NumberOfPlayers">Number of players</param>
         public FormPlayGame(int i_Size, int i_NumberOfPlayers)
         {
             m_BoardSize = i_Size;
-            m_NuberOfPlayers = i_NumberOfPlayers;
-            playerOneTurn = true;
-            
-            m_GM = new GameManager(i_Size, i_NumberOfPlayers, k_Player1Name, k_PlayerTwoName, true);
-            m_CurrenPlayer = m_GM.PlayerOne;
-            int sizeOfTheBoard = m_ButtonSize * m_BoardSize + (2 * m_StartPos);
+            m_NumberOfPlayers = i_NumberOfPlayers;
+            m_GameManager = new GameManager(m_BoardSize, m_NumberOfPlayers, k_Player1Name, k_PlayerTwoName);
 
-            initForm(sizeOfTheBoard);
+            FormBorderStyle = FormBorderStyle.FixedSingle;
 
-            SetCurrentStateOfTheBoard();
-
+            initNewGame();
         }
 
-        private void initForm(int i_Size)
+        /// <summary>
+        /// Initialize a new game
+        /// </summary>
+        private void initNewGame()
         {
-            Text = k_FormHeader;
-            Name = k_FormName;
-            ClientSize = new Size(i_Size, i_Size);
+            m_GameManager.SetNewGame();
+            m_PlayerOneTurn = true;
+            m_CurrenPlayer = m_GameManager.PlayerOne;
+            int sizeOfTheBoard = (k_ButtonSize * m_BoardSize) + (2 * k_StartPos);
+            this.Text = k_FormHeader;
+            this.Name = k_FormName;
+            ClientSize = new Size(sizeOfTheBoard, sizeOfTheBoard);
+            SetCurrentStateOfTheBoard();
         }
 
+        /// <summary>
+        /// Set the current state of the board in the form
+        /// </summary>
         public void SetCurrentStateOfTheBoard()
         {
-            //m_ListOfButtons = new MyButton[m_BoardSize, m_BoardSize];
+            Controls.Clear();
+            this.Text = k_FormHeader + m_CurrenPlayer.Name + "'s turn";
             for (int x = 0; x < m_BoardSize; x++)
             {
                 for (int y = 0; y < m_BoardSize; y++)
                 {
-                    m_BtnToDraw = new MyButton();
-                    m_BtnToDraw.Top = m_StartPos + (x * m_ButtonSize + Distance);
-                    m_BtnToDraw.Left = m_StartPos + (y * m_ButtonSize + Distance);
-                    m_BtnToDraw.Width = m_ButtonSize;
-                    m_BtnToDraw.Height = m_ButtonSize;
-
-                    m_BtnToDraw.X = x;
-                    m_BtnToDraw.Y = y;
+                    MyButton btnToDraw = new MyButton
+                    {
+                        Top = k_StartPos + (x * k_ButtonSize) + k_Distance,
+                        Left = k_StartPos + (y * k_ButtonSize) + k_Distance,
+                        Width = k_ButtonSize,
+                        Height = k_ButtonSize,
+                        X = x,
+                        Y = y,
+                        Enabled = false
+                    };
 
                     // Possible add Buttonclick event etc..
-                    //m_ListOfButtons[x, y] = m_BtnToDraw;
+                    Controls.Add(btnToDraw);
+                    paintButton(x, y, btnToDraw);
+                }
+            }
 
-                    if (m_GM.GameBoard[x, y] == Coin.X)
+            checkIfGameContinues();
+        }
+
+        /// <summary>
+        /// Paint the button according to logic
+        /// </summary>
+        /// <param name="i_X">X Coordinate</param>
+        /// <param name="i_Y">Y Coordinate</param>
+        /// <param name="i_BtnToDraw">Button to draw</param>
+        private void paintButton(int i_X, int i_Y, MyButton i_BtnToDraw)
+        {
+            switch (m_GameManager.GameBoard[i_X, i_Y])
+            {
+                case Coin.X:
+                    i_BtnToDraw.BackColor = Color.Black;
+                    i_BtnToDraw.Text = "O";
+                    i_BtnToDraw.ForeColor = Color.White;
+                    break;
+                case Coin.O:
+                    i_BtnToDraw.BackColor = Color.White;
+                    i_BtnToDraw.Text = "O";
+                    i_BtnToDraw.ForeColor = Color.Black;
+                    break;
+            }
+
+            if (m_CurrenPlayer[i_X, i_Y])
+            {
+                i_BtnToDraw.BackColor = Color.Green;
+                i_BtnToDraw.Enabled = true;
+                i_BtnToDraw.Click += button_Clicked;
+            }
+        }
+
+        /// <summary>
+        /// Check if there available moves
+        /// </summary>
+        private void checkIfGameContinues()
+        {
+            if (m_CurrenPlayer.AvailableMoves == 0)
+            {
+                m_CurrenPlayer = m_PlayerOneTurn ? m_GameManager.PlayerTwo : m_GameManager.PlayerOne;
+                m_PlayerOneTurn = !m_PlayerOneTurn;
+                if (m_CurrenPlayer.AvailableMoves == 0)
+                {
+                    bool toPlayAgaing = playAgain();
+                    if (toPlayAgaing)
                     {
-                        m_BtnToDraw.BackColor = Color.Black;
-                        m_BtnToDraw.Text = "O";
-                        m_BtnToDraw.ForeColor = Color.White;
+                        initNewGame();
                     }
-                    else if (m_GM.GameBoard[x, y] == Coin.O)
+                    else
                     {
-                        m_BtnToDraw.BackColor = Color.White;
-                        m_BtnToDraw.Text = "O";
-                        m_BtnToDraw.ForeColor = Color.Black;
+                        Close();
                     }
-
-                    if (m_CurrenPlayer[x, y])
+                }
+                else
+                {
+                    if (m_CurrenPlayer.IsComp)
                     {
-                        m_BtnToDraw.BackColor = Color.Green;
+                        invokeCompMove();
                     }
 
-                    m_BtnToDraw.Click += button_Clicked;
-
-                    Controls.Add(m_BtnToDraw);
-
+                    SetCurrentStateOfTheBoard();
                 }
             }
         }
 
-        private void button_Clicked(object sender, EventArgs e)
+        /// <summary>
+        /// Make a move according to the clicked button
+        /// </summary>
+        /// <param name="i_Sender">The sender</param>
+        /// <param name="i_E">Event arguments</param>
+        private void button_Clicked(object i_Sender, EventArgs i_E)
         {
-            MyButton currentButton = sender as MyButton;
-            if (currentButton != null) Utils.MakeMove(ref m_GM, ref m_CurrenPlayer, currentButton.X, currentButton.Y);
-            m_CurrenPlayer = playerOneTurn ? m_GM.PlayerTwo : m_GM.PlayerOne;
-            Utils.UpadteAvailableMoves(m_GM, ref m_CurrenPlayer);
-            playerOneTurn = !playerOneTurn;
-            Controls.Clear();
+            MyButton currentButton = i_Sender as MyButton;
+            if (currentButton != null)
+            {
+                Utils.MakeMove(ref m_GameManager, m_CurrenPlayer, currentButton.X, currentButton.Y);
+            }
+
+            m_CurrenPlayer = m_PlayerOneTurn ? m_GameManager.PlayerTwo : m_GameManager.PlayerOne;
+            Utils.UpadteAvailableMoves(m_GameManager, m_CurrenPlayer);
+            m_PlayerOneTurn = !m_PlayerOneTurn;
+            System.Threading.Thread.Sleep(250);
+
+            if (m_CurrenPlayer.IsComp)
+            {
+                invokeCompMove();
+            }
+
             SetCurrentStateOfTheBoard();
-
-
         }
 
-                //isGameOver = currentPlayerMove(m_CurrentPlayer, ref isGameOver, ref otherPlayer);
-
-                // Switch turns for next move.
-                //if (!isGameOver)
-                //{
-                //    playerOneTurn = !playerOneTurn;
-                 //   otherPlayer = m_CurrentPlayer;
-        //        }
-        //    }
-        //}
-
-        private void updateForm()
+        /// <summary>
+        /// Make AI move
+        /// </summary>
+        private void invokeCompMove()
         {
-            
+            if (m_CurrenPlayer.AvailableMoves != 0)
+            {
+                int x;
+                int y;
+                Utils.GetAiMove(m_GameManager, m_CurrenPlayer, out x, out y);
+                Utils.MakeMove(ref m_GameManager, m_CurrenPlayer, x, y);
+            }
+
+            m_CurrenPlayer = m_PlayerOneTurn ? m_GameManager.PlayerTwo : m_GameManager.PlayerOne;
+            Utils.UpadteAvailableMoves(m_GameManager, m_CurrenPlayer);
+            m_PlayerOneTurn = !m_PlayerOneTurn;
         }
 
+        /// <summary>
+        /// Ask the user if he wants play this game again
+        /// </summary>
+        /// <returns>true for play again. false for end game.</returns>
+        private bool playAgain()
+        {
+            string header = "Othello";
+            string message = string.Format(
+@"{0}
+Would you like to another round?", 
+                                 m_GameManager.PrintResult(m_GameManager));
+
+            DialogResult dialogResult = MessageBox.Show(message, header, MessageBoxButtons.YesNo);
+            return dialogResult == DialogResult.Yes;
+        }
+
+        /// <summary>
+        /// Gets start position
+        /// </summary>
         public int StartPos
         {
-            get { return m_StartPos; }
+            get { return k_StartPos; }
         }
 
+        /// <summary>
+        /// Gets board size
+        /// </summary>
         public int BoardSize
         {
             get { return m_BoardSize; }
         }
 
+        /// <summary>
+        /// Gets buttons size
+        /// </summary>
         public int ButtonSize
         {
-            get { return m_ButtonSize; }
-        }
-    }
-
-
-    public class MyButton : Button
-    {
-        private int m_X;
-        private int m_Y;
-
-        public int X
-        {
-            get { return this.m_X; }
-            set { this.m_X = value; }
-        }
-
-        public int Y
-        {
-            get { return this.m_Y; }
-            set { this.m_Y = value; }
+            get { return k_ButtonSize; }
         }
     }
 }
