@@ -1,12 +1,12 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Utils.cs" company="B15_Ex02">
+// <copyright file="Utils.cs" company="GameLogic">
 // Yafim Vodkov 308973882 Or Brand 302521034
 // </copyright>
 //----------------------------------------------------------------------
 using System;
 using System.Collections.Generic;
 
-namespace B15_Ex05_1
+namespace GameLogic
 {
     /// <summary>
     /// This class holds Othello game logic.
@@ -26,7 +26,7 @@ namespace B15_Ex05_1
         /// <returns>Clone of io_GameManagerToClone</returns>
         private static GameManager cloneGameManager(GameManager i_GameManagerToClone, Player i_Player)
         {
-            GameManager clonedGameManager = new GameManager(i_GameManagerToClone.Size, 1, i_Player.Name, "Comp", false);
+            GameManager clonedGameManager = new GameManager(i_GameManagerToClone.Size, 1, i_Player.Name, "Comp");
             for (int i = 0; i < i_GameManagerToClone.Size; i++)
             {
                 for (int j = 0; j < i_GameManagerToClone.Size; j++)
@@ -72,7 +72,7 @@ namespace B15_Ex05_1
         /// <param name="i_Player">Current player</param>
         /// <param name="i_NewX">X coordinate</param>
         /// <param name="i_NewY">Y coordinate</param>
-        public static void MakeMove(ref GameManager io_GameManager, ref Player i_Player, int i_NewX, int i_NewY)
+        public static void MakeMove(ref GameManager io_GameManager, Player i_Player, int i_NewX, int i_NewY)
         {
             io_GameManager[i_NewX, i_NewY] = i_Player.ShapeCoin;
             i_Player[i_NewX, i_NewY] = false;
@@ -88,7 +88,7 @@ namespace B15_Ex05_1
             }
 
             // Update valid moves for player
-            UpadteAvailableMoves(io_GameManager, ref i_Player);
+            UpadteAvailableMoves(io_GameManager, i_Player);
         }
 
         /// <summary>
@@ -104,7 +104,6 @@ namespace B15_Ex05_1
             GameManager tempGameManager = cloneGameManager(i_CurrentGameState, i_Player);
 
             int maxMovesSoFar = 0;
-            int availableMovesForCurrentStep;
 
             List<Coord> bestResultsArray = new List<Coord>();
 
@@ -113,8 +112,8 @@ namespace B15_Ex05_1
                 int tempX = coordinate.m_X;
                 int tempY = coordinate.m_Y;
 
-                MakeMove(ref tempGameManager, ref tempPlayer, tempX, tempY);
-                availableMovesForCurrentStep = tempPlayer.PossibleMovesCoordinates.Count;
+                MakeMove(ref tempGameManager, tempPlayer, tempX, tempY);
+                int availableMovesForCurrentStep = tempPlayer.PossibleMovesCoordinates.Count;
 
                 if (availableMovesForCurrentStep == maxMovesSoFar)
                 {
@@ -300,13 +299,13 @@ namespace B15_Ex05_1
         /// </summary>
         /// <param name="i_GameManager">Current state of the game</param>
         /// <param name="io_Player">Current player</param>
-        public static void UpadteAvailableMoves(GameManager i_GameManager, ref Player io_Player)
+        public static void UpadteAvailableMoves(GameManager i_GameManager, Player io_Player)
         {
             Coin opponentCoin = getOpponentCoin(io_Player);
             io_Player.AvailableMoves = 0;
 
             io_Player.PossibleMovesCoordinates.Clear();
-            clearPlayerAvailableMoves(i_GameManager, ref io_Player);
+            clearPlayerAvailableMoves(i_GameManager, io_Player);
 
             // for each squre - if there's opponent coin there, check for available moves around it.
             for (int i = 0; i < i_GameManager.Size; i++)
@@ -329,7 +328,7 @@ namespace B15_Ex05_1
         /// </summary>
         /// <param name="i_GameManager">Current state of the game</param>
         /// <param name="io_Player">Current player</param>
-        private static void clearPlayerAvailableMoves(GameManager i_GameManager, ref Player io_Player)
+        private static void clearPlayerAvailableMoves(GameManager i_GameManager, Player io_Player)
         {
             for (int i = 0; i < i_GameManager.Size; i++)
             {

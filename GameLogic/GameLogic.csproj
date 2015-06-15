@@ -4,15 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{0718FDD2-6827-41A7-8A42-68A0DA41B271}</ProjectGuid>
+    <ProjectGuid>{71E06039-BF0C-49AB-95FF-938FE3D52AF3}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>B15_Ex05_1</RootNamespace>
-    <AssemblyName>B15 Ex05_1</AssemblyName>
+    <RootNamespace>GameLogic</RootNamespace>
+    <AssemblyName>GameLogic</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -37,10 +35,6 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <None Include="App.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Drawer.cs" />
     <Compile Include="GameManager.cs" />
     <Compile Include="Player.cs" />
     <Compile Include="Utils.cs" />

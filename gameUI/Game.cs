@@ -1,58 +1,37 @@
 ﻿//-----------------------------------------------------------------------
-// <copyright file="Game.cs" company="B15_Ex02">
+// <copyright file="Game.cs" company="GameUI">
 // Yafim Vodkov 308973882 Or Brand 302521034
 // </copyright>
 //----------------------------------------------------------------------
-using System;
 using System.Windows.Forms;
-using B15_Ex05_1;
-using gameUI;
 
-namespace gameUI1
+namespace GameUI
 {
     /// <summary>
     /// Initializes a new game with given parameters.
     /// </summary>
     public class Game
     {
-
-
         /// <summary>
         /// Initializes a new instance of the Game class.
         /// </summary>
         public Game()
         {
             FormSettings formSettings = new FormSettings();
+            Application.EnableVisualStyles();
             formSettings.ShowDialog();
         }
 
+        /// <summary>
+        /// Start the form of play the game.
+        /// </summary>
+        /// <param name="i_Size">Board Size</param>
+        /// <param name="i_NumberOfPlayers">Number of players</param>
         public static void StartGame(int i_Size, int i_NumberOfPlayers)
         {
-            bool runGame = true;
-          //  while (runGame)
-          //  {
-                // TODO: Start form of game
-                FormPlayGame formPlayGame = new FormPlayGame(i_Size, i_NumberOfPlayers);
-                formPlayGame.ShowDialog();
-
-//                runGame = playAgain(gameManager);
-        //    }
-
+            FormPlayGame formPlayGame = new FormPlayGame(i_Size, i_NumberOfPlayers);
+            formPlayGame.ShowDialog();
             MessageBox.Show("Thank You for playing...");
-        }
-
-        /// <summary>
-        /// Ask the user if he wants play this game again
-        /// </summary>
-        /// <returns>true for play again. false for end game.</returns>
-        private static bool playAgain(GameManager i_GameManager)
-        {
-            string header = "Othello";
-            string message = string.Format(@"{0}
-Would you like to another round?", i_GameManager.PrintResult());
-
-            DialogResult dialogResult = MessageBox.Show(message, header, MessageBoxButtons.YesNo);
-            return (dialogResult == DialogResult.Yes);
         }
     }
 }

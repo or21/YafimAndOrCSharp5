@@ -4,13 +4,15 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{B012A824-1943-4A6C-B287-E09059B6D5C6}</ProjectGuid>
-    <OutputType>WinExe</OutputType>
+    <ProjectGuid>{0718FDD2-6827-41A7-8A42-68A0DA41B271}</ProjectGuid>
+    <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>gameUI</RootNamespace>
-    <AssemblyName>gameUI</AssemblyName>
+    <RootNamespace>B15_Ex05_1</RootNamespace>
+    <AssemblyName>B15 Ex05_1</AssemblyName>
     <TargetFrameworkVersion>v2.0</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -35,33 +37,12 @@
     <StartupObject />
   </PropertyGroup>
   <ItemGroup>
-    <Compile Include="FormSettings.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="FormPlayGame.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="Game.cs" />
-    <Compile Include="MyButton.cs">
-      <SubType>Component</SubType>
-    </Compile>
-    <Compile Include="Program.cs" />
+    <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Reference Include="System" />
-    <Reference Include="System.Drawing" />
-    <Reference Include="System.Windows.Forms" />
-  </ItemGroup>
-  <ItemGroup>
-    <EmbeddedResource Include="FormSettings.resx">
-      <DependentUpon>FormSettings.cs</DependentUpon>
-    </EmbeddedResource>
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GameLogic\GameLogic.csproj">
-      <Project>{71e06039-bf0c-49ab-95ff-938fe3d52af3}</Project>
-      <Name>GameLogic</Name>
-    </ProjectReference>
+    <Compile Include="GameManager.cs" />
+    <Compile Include="Player.cs" />
+    <Compile Include="Utils.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
