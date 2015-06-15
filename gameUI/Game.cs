@@ -31,7 +31,6 @@ namespace GameUI
         {
             FormPlayGame formPlayGame = new FormPlayGame(i_Size, i_NumberOfPlayers);
             formPlayGame.ShowDialog();
-            MessageBox.Show("Thank You for playing...");
         }
     }
 }

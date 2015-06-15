@@ -4,6 +4,8 @@
 // </copyright>
 //----------------------------------------------------------------------
 
+using System.Windows.Forms;
+
 namespace GameUI
 {
     /// <summary>
@@ -17,6 +19,7 @@ namespace GameUI
         public static void Main()
         {
             new Game();
+            MessageBox.Show("Thank You for playing...");
         }
     }
 }
